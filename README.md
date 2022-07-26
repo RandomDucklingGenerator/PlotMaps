@@ -1,6 +1,6 @@
 # Plot Map
 
-![map](https://raw.githubusercontent.com/RandomDucklingGenerator/PlotMaps/master/src/assets/background.JPG?token=GHSAT0AAAAAABW3AR4Z72FRM6VXORXFN24UYXAHMSQ)
+![map](https://github.com/RandomDucklingGenerator/PlotMaps/raw/master/src/assets/background.JPG)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.0.
 

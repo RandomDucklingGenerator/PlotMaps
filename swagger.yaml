@@ -1,0 +1,168 @@
+openapi: 3.0.1
+info:
+  title: PlotMap.API
+  version: v1
+paths:
+  /Choropleth:
+    get:
+      tags:
+        - Choropleth
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+  /Plots/{id}:
+    get:
+      tags:
+        - Plots
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Data'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Data'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Data'
+  /Plots/screenshot/{id}:
+    get:
+      tags:
+        - Plots
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /Plots:
+    get:
+      tags:
+        - Plots
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Data'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Data'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Data'
+  
+components:
+  schemas:
+    Screenshots:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        screenshot:
+          type: string
+          format: byte
+          nullable: true
+      additionalProperties: false
+    Data:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        siteID:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        timeStampUnix:
+          type: integer
+          format: int64
+        priceM2:
+          type: string
+          nullable: true
+        areaM2:
+          type: string
+          nullable: true
+        district:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        latitude:
+          type: string
+          nullable: true
+        longitude:
+          type: string
+          nullable: true
+        price:
+          type: string
+          nullable: true
+        addedDate:
+          type: string
+          format: date-time
+        scrappedDate:
+          type: string
+          format: date-time
+        invalidSetDate:
+          type: integer
+          format: int64
+        isActive:
+          type: boolean
+        screenshots:
+          type: array
+          items:
+            $ref: '#/components/schemas/Screenshots'
+          nullable: true
+      additionalProperties: false
+
+

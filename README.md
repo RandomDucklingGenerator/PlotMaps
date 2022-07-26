@@ -1,5 +1,7 @@
 # Plot Map
 
+![map](https://raw.githubusercontent.com/RandomDucklingGenerator/PlotMaps/master/src/assets/background.JPG?token=GHSAT0AAAAAABW3AR4Z72FRM6VXORXFN24UYXAHMSQ)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.0.
 
 ## Development server
@@ -25,3 +27,6 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Attribution
+<a href="https://www.flaticon.com/free-icon/duck_2466832?" title="duck icons">Duck icon created by pongsakornRed - Flaticon</a>

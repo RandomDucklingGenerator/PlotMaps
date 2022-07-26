@@ -1,0 +1,9 @@
+<div
+  style="height: 100vh;"
+  leaflet
+  [leafletOptions]="options"
+  (leafletMapReady)="onMapReady($event)"
+  [leafletLayersControl]="layersControl"
+  [leafletLayers]="layers"
+  [leafletMarkerCluster]="markerClusterData">
+</div>

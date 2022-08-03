@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
-import * as H from 'leaflet.heat';
 import { PopUpService } from './popup.service';
-import 'leaflet.heat/dist/leaflet-heat.js';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Plot } from '../models/plot';
 import { Model } from '../models/repository.model';
@@ -55,7 +53,7 @@ export class MarkerService {
         this.cluster?.clearLayers();
         this.powiaty?.clearLayers();
 
-        var markerList: L.HeatLatLngTuple[] = [[1, 1, 1]];
+        var markerList:any = [[1, 1, 1]];
 
         for (let i = 0; i < plots.length; i++) {
             const lon = plots[i].longitude;

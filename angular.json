@@ -63,10 +63,7 @@
               "./node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css"
             ],
             "scripts": [
-              "./node_modules/leaflet/dist/leaflet.js",
-              "./node_modules/heatmap.js/build/heatmap.js",
-              "./node_modules/leaflet-heatmap/leaflet-heatmap.js"
-            ]
+              "./node_modules/leaflet/dist/leaflet.js"            ]
           },
           "configurations": {
             "production": {

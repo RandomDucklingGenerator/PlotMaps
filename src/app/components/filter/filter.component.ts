@@ -8,7 +8,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormGroup, FormControl, NgForm } from '@angular/forms';
-import { MatAccordion } from '@angular/material/expansion';
 import { Model } from 'src/app/models/repository.model';
 
 @Component({

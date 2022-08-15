@@ -32,6 +32,7 @@
     "@ng-bootstrap/ng-bootstrap": "^10.0.0",
     "@types/leaflet.markercluster": "^1.4.6",
     "@types/proj4leaflet": "^1.0.6",
+    "bootstrap": "^5.2.0",
     "cors": "^2.8.5",
     "leaflet": "^1.7.1",
     "leaflet.markercluster": "^1.5.3",

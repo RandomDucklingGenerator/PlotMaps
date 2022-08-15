@@ -3,6 +3,7 @@ import { BehaviorSubject, interval } from 'rxjs';
 import { DataService } from '../services/data.service';
 import { Plot } from './plot';
 import { exhaustMap } from 'rxjs/operators';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Injectable()
 export class Model {
@@ -38,11 +39,26 @@ export class Model {
     ChangeActiveMarker(arg0: Plot) {
         this.selectedPlot$.next(arg0);
     }
-    updatePlots(mindate?: string, maxDate?: string, priceMin?: number, priceMax?: number) {
+    updatePlots(
+        mindate?: string,
+        maxDate?: string,
+        priceMin?: number,
+        priceMax?: number,
+        showNewest?: boolean
+    ) {
         this.dataService.GetPlots(mindate, maxDate, priceMin, priceMax).subscribe(data => {
-            this.plots$.next(data);
             this.initPlots = data;
+            this.plots$.next(data);
         });
+    }
+    softUpdate(showNewest?: boolean) {
+        if (showNewest) {
+            this.plots$.next(
+                this.initPlots.slice(this.initPlots.length - 500, this.initPlots.length)
+            );
+        } else {
+            this.plots$.next(this.initPlots);
+        }
     }
 
     toggleInactivePlots(showInactive: boolean) {

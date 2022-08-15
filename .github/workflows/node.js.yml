@@ -34,4 +34,12 @@ jobs:
         run: npm run ci:build
       
       - name: List Files in Distribution Directory
-        run: ls -R ./dist
+        run: ls -R ./dist      
+        
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-without-markdown
+          path: |
+            dist
+            !dist/**/*.md

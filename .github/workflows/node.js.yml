@@ -37,7 +37,7 @@ jobs:
         run: ls -R ./dist      
         
       - name: Upload to github-pages
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact
         with:
           name: dist-without-markdown
           path: |

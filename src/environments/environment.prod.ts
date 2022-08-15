@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    baseUrl: 'http://localhost:50111'
+    baseUrl: 'https://photondck.azurewebsites.net'
 };

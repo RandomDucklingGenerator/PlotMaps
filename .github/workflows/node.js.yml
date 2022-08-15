@@ -36,8 +36,8 @@ jobs:
       - name: List Files in Distribution Directory
         run: ls -R ./dist      
         
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
+      - name: Upload to github-pages
+        uses: actions/upload-pages-artifact@v3
         with:
           name: dist-without-markdown
           path: |

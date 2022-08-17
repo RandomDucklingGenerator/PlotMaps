@@ -99,7 +99,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     };
     markers: L.Marker[] = [];
     constructor(private markerService: MarkerService) {
-        this.layers = [this.LAYER_OSM.layer, this.marker, this.tracts];
+        this.layers = [this.LAYER_OSM.layer, this.marker];
     }
     ngOnInit(): void {}
 

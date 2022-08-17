@@ -23,6 +23,7 @@ export class MarkerService {
     powiaty: L.LayerGroup<any> | undefined;
     layer: L.LayerGroup<any> | undefined;
     choroplethData: any;
+    markerList: any;
 
     constructor(
         private http: HttpClient,
@@ -34,6 +35,13 @@ export class MarkerService {
         this.plots$ = model.getPlots();
         this.plots$.subscribe(plots => this.insertPlotMarkersToMap(plots));
         this.choroplethData = model.getChoropleth();
+    }
+
+    public openPopup(plot: Plot) {
+        this.map?.flyTo([plot.latitude, plot.longitude], 18, {
+            animate: true,
+            duration: 1
+        });
     }
 
     addMapToUpdate(
@@ -53,7 +61,7 @@ export class MarkerService {
         this.cluster?.clearLayers();
         this.powiaty?.clearLayers();
 
-        var markerList:any = [[1, 1, 1]];
+        this.markerList = [[1, 1, 1]];
 
         for (let i = 0; i < plots.length; i++) {
             const lon = plots[i].longitude;
@@ -64,11 +72,16 @@ export class MarkerService {
                 marker.on('click', event => {
                     this.model.ChangeActiveMarker(plots[i]);
                 });
-                marker.bindPopup(this.popupService.makeCapitalPopup(plots[i]));
+                //marker.bindPopup(this.popupService.makeCapitalPopup(plots[i]));
 
                 //marker.addTo(map);
                 this.cluster?.addLayer(marker);
-                markerList.push([marker.getLatLng().lat, marker.getLatLng().lng, plots[i].density]);
+                this.markerList.push([
+                    marker.getLatLng().lat,
+                    marker.getLatLng().lng,
+                    plots[i].density,
+                    plots[i].id
+                ]);
             }
         }
         this.cluster?.addTo(this.map!);

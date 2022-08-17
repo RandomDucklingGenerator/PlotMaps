@@ -48,6 +48,14 @@ export class Model {
     ) {
         this.dataService.GetPlots(mindate, maxDate, priceMin, priceMax).subscribe(data => {
             this.initPlots = data;
+            data.forEach(plot => {
+                if (plot.price == undefined || plot.price == null) {
+                    plot.price = plot.areaM2 * plot.priceM2;
+                }
+                if (plot.priceM2 == undefined || plot.priceM2 == null) {
+                    plot.priceM2 = plot.price / plot.areaM2;
+                }
+            });
             this.plots$.next(data);
         });
     }

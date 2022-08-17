@@ -1,0 +1,21 @@
+<div class="card" style="width: 27rem">
+    <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+    <div class="card-body" [ngClass]="{ 'bg-secondary': selected === true }">
+        <h5 class="card-title">
+            {{ plot.price | currency: 'PLN':'symbol':'4.2-2':'pl' }}
+            <a href="{{ plot.url }}" class="btn btn-outline-dark" target="_blank">Open</a>
+            <button
+                *ngIf="plot.latitude != undefined && plot.longitude != undefined"
+                (click)="openPopup()"
+                class="btn btn-outline-dark"
+            >
+                Jump to
+            </button>
+        </h5>
+        <p class="card-text">
+            {{ plot.areaM2 }} m<span>&#178;</span>
+            {{ plot.priceM2 | currency: 'PLN':'symbol':undefined:'pl' }}/m<span>&#178;</span>
+        </p>
+        <p class="card-text">{{ plot.city }}, {{ plot.district }}</p>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+.filter{
+  float: left;
+  width: auto;
+  min-width: 20%;
+}
+.map{
+  float: auto;
+}

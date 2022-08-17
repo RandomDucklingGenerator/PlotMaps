@@ -1,11 +1,12 @@
 # Plot Map
+[![Build](https://github.com/RandomDucklingGenerator/PlotMaps/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/RandomDucklingGenerator/PlotMaps/actions/workflows/node.js.yml)
 
 ![map](https://github.com/RandomDucklingGenerator/PlotMaps/raw/master/src/assets/background.JPG)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.0.
 
-## API
-Swagger available [here](https://randomducklinggenerator.github.io/PlotMaps/). 
+## Demo
+Demo available [here](https://randomducklinggenerator.github.io/PlotMaps/). 
 
 ## Development server
 

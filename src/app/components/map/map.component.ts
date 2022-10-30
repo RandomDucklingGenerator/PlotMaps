@@ -94,11 +94,11 @@ export class MapComponent implements AfterViewInit, OnInit {
     markerClusterData = [];
 
     options = {
-        zoom: 15,
+        zoom: 10,
         center: latLng(52.36237, 21.28629)
     };
     markers: L.Marker[] = [];
-    constructor(private markerService: MarkerService) {
+    constructor(private markerService: MarkerService, private ngZone: NgZone) {
         this.layers = [this.LAYER_OSM.layer, this.marker];
     }
     ngOnInit(): void {}
@@ -112,7 +112,9 @@ export class MapComponent implements AfterViewInit, OnInit {
 
     }
     onMapClick(e: L.LeafletEvent, map: L.Map): void {
-        this.markerService.boundsChanged(map.getBounds(), map.getZoom());
+        this.ngZone.run(() => {
+            this.markerService.boundsChanged(map.getBounds(), map.getZoom());
+        });
     }
 
     markerClusterReady(markerCluster: L.MarkerClusterGroup) {}

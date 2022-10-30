@@ -39,6 +39,11 @@ export class Model {
     ChangeActiveMarker(arg0: Plot) {
         this.selectedPlot$.next(arg0);
     }
+
+    updatePlotsWithBounds(arg0: L.LatLngBounds, arg1: number){
+        this.dataService.GetPlotsWithBounds(arg0, arg1).subscribe(data => {this.initPlots = data; this.plots$.next(data)});
+    }
+
     updatePlots(
         mindate?: string,
         maxDate?: string,
@@ -59,14 +64,15 @@ export class Model {
             this.plots$.next(data);
         });
     }
-    softUpdate(showNewest?: boolean) {
+    softUpdate(showNewest?: boolean, showInactive?: boolean) {
+        var plots = this.initPlots;
         if (showNewest) {
-            this.plots$.next(
-                this.initPlots.slice(this.initPlots.length - 500, this.initPlots.length)
-            );
-        } else {
-            this.plots$.next(this.initPlots);
+            plots = plots.slice(this.initPlots.length - 500, this.initPlots.length);
         }
+        if (!showInactive) {
+            plots = plots.filter(p => p.isActive == true);
+        }
+        this.plots$.next(plots);
     }
 
     toggleInactivePlots(showInactive: boolean) {

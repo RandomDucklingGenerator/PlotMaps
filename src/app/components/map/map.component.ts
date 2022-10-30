@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ComponentFactoryResolver, NgZone } from '@angular/core';
 import * as L from 'leaflet';
 import { MarkerService } from '../../services/marker.service';
 import { icon, latLng, marker, tileLayer } from 'leaflet';
@@ -94,7 +94,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     markerClusterData = [];
 
     options = {
-        zoom: 10,
+        zoom: 15,
         center: latLng(52.36237, 21.28629)
     };
     markers: L.Marker[] = [];
@@ -106,7 +106,16 @@ export class MapComponent implements AfterViewInit, OnInit {
     ngAfterViewInit(): void {}
 
     onMapReady(map: L.Map) {
-        this.markerService.addMapToUpdate(this.marker, this.markerClusterGroup, this.Subareas, map);
+        // this.markerService.addMapToUpdate(this.marker, this.markerClusterGroup, this.Subareas, map);
+        this.markerService.addMapToUpdate(this.marker, this.Subareas, map);
+        map.on('moveend', e => this.onMapClick(e, map));
+
     }
+    onMapClick(e: L.LeafletEvent, map: L.Map): void {
+        this.markerService.boundsChanged(map.getBounds(), map.getZoom());
+    }
+
     markerClusterReady(markerCluster: L.MarkerClusterGroup) {}
+
+    
 }

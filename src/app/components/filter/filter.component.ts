@@ -45,6 +45,11 @@ export class FilterComponent implements OnInit, AfterViewInit {
         });
     }
 
+    disabledChanged(value: boolean) {
+        this.showInactive = value;
+        this.softFilter();
+    }
+
     newestPlotsChanged(value: boolean) {
         this.newestPlots = value;
         this.softFilter();
@@ -71,6 +76,6 @@ export class FilterComponent implements OnInit, AfterViewInit {
     }
 
     softFilter() {
-        this.model.softUpdate(this.newestPlots);
+        this.model.softUpdate(this.newestPlots, this.showInactive);
     }
 }

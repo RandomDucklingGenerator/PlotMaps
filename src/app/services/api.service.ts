@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { LatLngBounds } from 'leaflet';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Plot } from '../models/plot';
@@ -8,6 +9,7 @@ import { Plot } from '../models/plot';
     providedIn: 'root'
 })
 export class ApiService {
+
     constructor(private http: HttpClient) {}
 
     public getPlots(
@@ -21,6 +23,13 @@ export class ApiService {
             // queryString=`minDate=${minDate}&maxDate=${maxDate}&priceMin=${priceMin}&priceMax=${priceMax}`
         }
 
+        const path = `${environment.baseUrl}/plots?${queryString}`;
+        return this.http.get<Plot[]>(path);
+    }
+
+    getPlotsWithBounds(arg0: LatLngBounds, arg1: number): Observable<Plot[]> {
+        console.log(arg0);
+        let queryString=`northEastLat=${arg0.getNorthEast().lat}&northEastLng=${arg0.getNorthEast().lng}&southWestLat=${arg0.getSouthWest().lat}&southWestLng=${arg0.getSouthWest().lng}&zoom=${arg1}`
         const path = `${environment.baseUrl}/plots?${queryString}`;
         return this.http.get<Plot[]>(path);
     }

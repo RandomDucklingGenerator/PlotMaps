@@ -19,6 +19,11 @@ export class DataService {
         return this.apiService.getPlots(mindate, maxDate, priceMin, priceMax);
     }
 
+    public GetPlotsWithBounds(arg0: L.LatLngBounds, arg1: number
+    ): Observable<Plot[]> {
+        return this.apiService.getPlotsWithBounds(arg0, arg1);
+    }
+
     public GetChoropleth(): any {
         return this.apiService.getChoropleth();
     }

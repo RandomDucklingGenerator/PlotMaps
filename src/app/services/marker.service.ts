@@ -13,6 +13,7 @@ import { GeoJSONOptions } from 'leaflet';
     providedIn: 'root'
 })
 export class MarkerService {
+
     geojson: any | undefined;
     markers: Plot[] = [];
     max: number = 0;
@@ -44,15 +45,20 @@ export class MarkerService {
         });
     }
 
+    boundsChanged(arg0: L.LatLngBounds, arg1: number) {
+        console.log(arg0, arg1);
+        this.model.updatePlotsWithBounds(arg0, arg1);
+    }
+
     addMapToUpdate(
         layer: L.LayerGroup,
-        cluster: L.MarkerClusterGroup,
+        //cluster: L.MarkerClusterGroup,
         powiaty: L.LayerGroup,
         map: L.Map
     ) {
         this.map = map;
         this.layer = layer;
-        this.cluster = cluster;
+        //this.cluster = cluster;
         this.powiaty = powiaty;
     }
 
@@ -74,8 +80,8 @@ export class MarkerService {
                 });
                 //marker.bindPopup(this.popupService.makeCapitalPopup(plots[i]));
 
-                //marker.addTo(map);
-                this.cluster?.addLayer(marker);
+                marker.addTo(this.map!);
+                //this.cluster?.addLayer(marker);
                 this.markerList.push([
                     marker.getLatLng().lat,
                     marker.getLatLng().lng,
@@ -84,7 +90,7 @@ export class MarkerService {
                 ]);
             }
         }
-        this.cluster?.addTo(this.map!);
+        //this.cluster?.addTo(this.map!);
 
         this.model.getChoropleth().subscribe((GeoJsonObject: any) => {
             const stateLayer = L.geoJSON(GeoJsonObject, {

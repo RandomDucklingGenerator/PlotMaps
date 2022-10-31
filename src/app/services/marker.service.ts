@@ -95,7 +95,7 @@ export class MarkerService {
                 if (lat != null && lon != null) {
                     const marker = L.marker([lat, lon]);
                     marker.on('click', event => {
-                        this.model.ChangeActiveMarker(plots.clusters[i]);
+                        //this.model.ChangeActiveMarker(plots.clusters[i]);
                     });
                     //marker.bindPopup(this.popupService.makeCapitalPopup(plots[i]));
     

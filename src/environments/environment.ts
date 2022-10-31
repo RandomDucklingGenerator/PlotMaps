@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    baseUrl: 'https://photondck.azurewebsites.net'
+    baseUrl: 'http://192.168.88.67:50112'
 };
 
 /*

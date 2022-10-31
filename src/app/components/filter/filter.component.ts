@@ -45,20 +45,6 @@ export class FilterComponent implements OnInit, AfterViewInit {
         });
     }
 
-    disabledChanged(value: boolean) {
-        this.showInactive = value;
-        this.softFilter();
-    }
-
-    newestPlotsChanged(value: boolean) {
-        this.newestPlots = value;
-        this.softFilter();
-    }
-    InactivePlotChanged() {
-        this.showInactive = !this.showInactive;
-        this.model.toggleInactivePlots(this.showInactive);
-    }
-
     applyFilters() {
         const mindate = new Date(this.range.value.start);
         const maxdate = new Date(this.range.value.end);
@@ -75,7 +61,4 @@ export class FilterComponent implements OnInit, AfterViewInit {
         localStorage.setItem('priceMax', this.priceMax.toString());
     }
 
-    softFilter() {
-        this.model.softUpdate(this.newestPlots, this.showInactive);
-    }
 }

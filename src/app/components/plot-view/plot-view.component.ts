@@ -1,9 +1,8 @@
-import { PathLocationStrategy } from '@angular/common';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Plot } from 'src/app/models/plot';
+import { PlotData } from 'src/app/models/plotdata';
 import { Model } from 'src/app/models/repository.model';
-import { MarkerService } from 'src/app/services/marker.service';
 
 @Component({
     selector: 'app-plot-view',
@@ -12,8 +11,8 @@ import { MarkerService } from 'src/app/services/marker.service';
 })
 export class PlotViewComponent implements OnInit {
     FILTER_PAG_REGEX = /[^0-9]/g;
-    plots$: BehaviorSubject<Plot[]>;
-    plots!: Plot[];
+    plots$: BehaviorSubject<PlotData>;
+    plots!: PlotData;
     page: number = 1;
     pageSize: number = 5;
     eventsSubject: Subject<Plot> = new Subject<Plot>();
@@ -25,27 +24,33 @@ export class PlotViewComponent implements OnInit {
         this.plots$.subscribe(plots => this.applyPlots(plots));
         this.selectedMarker$ = model.getActivePlot();
         this.selectedMarker$.subscribe(plot => {
-            let selectedPlot = this.plots.find(p => p.id === plot!.id);
-            let index = this.plots.indexOf(selectedPlot!);
-            let selectedPage = index / this.pageSize;
-            let rounded = selectedPage + 1;
-            if (selectedPage % 1 != 0) {
-                rounded = Math.ceil(selectedPage);
+            if(plot !== undefined){
+                let selectedPlot = this.plots.points.find(p => p.id === plot!.id);
+                let index = this.plots.points.indexOf(selectedPlot!);
+                let selectedPage = index / this.pageSize;
+                let rounded = selectedPage + 1;
+                if (selectedPage % 1 != 0) {
+                    rounded = Math.ceil(selectedPage);
+                }
+    
+                this.ngZone.run(() => {
+                    this.page = rounded;
+                });
+                this.ngZone.run(() => {
+                    this.eventsSubject.next(plot);
+                });
             }
-
-            this.ngZone.run(() => {
-                this.page = rounded;
-            });
-            this.ngZone.run(() => {
-                this.eventsSubject.next(plot);
-            });
+            
         });
     }
 
     ngOnInit(): void {}
 
-    applyPlots(plots: Plot[]): void {
-        this.plots = plots;
+    applyPlots(plots: PlotData): void {
+        if(plots != undefined){
+            this.plots = plots;
+
+        }
     }
     selectPage(page: string) {
         this.page = parseInt(page, 10) || 1;

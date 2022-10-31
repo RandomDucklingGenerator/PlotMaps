@@ -14,4 +14,5 @@ export type Plot = {
   invalidSetDate: number;
   isActive: boolean;
   density: number;
+  type: number;
 }

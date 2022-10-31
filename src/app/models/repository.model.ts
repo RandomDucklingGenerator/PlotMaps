@@ -4,15 +4,16 @@ import { DataService } from '../services/data.service';
 import { Plot } from './plot';
 import { exhaustMap } from 'rxjs/operators';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import { PlotData } from './plotdata';
 
 @Injectable()
 export class Model {
-    private plots: Plot[] = new Array<Plot>();
-    private initPlots: Plot[] = new Array<Plot>();
+    private plots!: PlotData;
+    private initPlots!: PlotData;
     private selectedPlot: Plot | undefined = undefined;
-    private plots$: BehaviorSubject<Plot[]> = new BehaviorSubject<Plot[]>(this.plots);
+    private plots$: BehaviorSubject<PlotData> = new BehaviorSubject<PlotData>(this.plots);
     private selectedPlot$: BehaviorSubject<Plot | undefined> = new BehaviorSubject<
-        Plot | undefined
+    Plot | undefined
     >(this.selectedPlot);
     private choropleth?: any;
     private choropleth$: BehaviorSubject<any> = new BehaviorSubject<any>(this.choropleth);
@@ -23,11 +24,13 @@ export class Model {
 
     private getChoroplethData() {
         this.dataService.GetChoropleth().subscribe((data: any) => {
-            this.choropleth$.next(data);
+            if(data != undefined){
+                this.choropleth$.next(data);
+            }
         });
     }
 
-    getPlots(): BehaviorSubject<Plot[]> {
+    getPlots(): BehaviorSubject<PlotData> {
         return this.plots$;
     }
     getChoropleth(): BehaviorSubject<any> {
@@ -52,34 +55,20 @@ export class Model {
         showNewest?: boolean
     ) {
         this.dataService.GetPlots(mindate, maxDate, priceMin, priceMax).subscribe(data => {
-            this.initPlots = data;
-            data.forEach(plot => {
-                if (plot.price == undefined || plot.price == null) {
-                    plot.price = plot.areaM2 * plot.priceM2;
-                }
-                if (plot.priceM2 == undefined || plot.priceM2 == null) {
-                    plot.priceM2 = plot.price / plot.areaM2;
-                }
-            });
-            this.plots$.next(data);
+            if(data != undefined){
+                this.initPlots = data;
+                data.points.forEach(plot => {
+                    if (plot.price == undefined || plot.price == null) {
+                        plot.price = plot.areaM2 * plot.priceM2;
+                    }
+                    if (plot.priceM2 == undefined || plot.priceM2 == null) {
+                        plot.priceM2 = plot.price / plot.areaM2;
+                    }
+                });
+                this.plots$.next(data);
+            }
+           
         });
     }
-    softUpdate(showNewest?: boolean, showInactive?: boolean) {
-        var plots = this.initPlots;
-        if (showNewest) {
-            plots = plots.slice(this.initPlots.length - 500, this.initPlots.length);
-        }
-        if (!showInactive) {
-            plots = plots.filter(p => p.isActive == true);
-        }
-        this.plots$.next(plots);
-    }
 
-    toggleInactivePlots(showInactive: boolean) {
-        var plots = this.initPlots;
-        if (!showInactive) {
-            plots = plots.filter(p => p.isActive === true);
-        }
-        this.plots$.next(plots);
-    }
 }

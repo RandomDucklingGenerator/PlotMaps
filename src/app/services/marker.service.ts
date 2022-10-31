@@ -8,18 +8,37 @@ import { Model } from '../models/repository.model';
 import { ComponentFactoryResolver } from '@angular/core';
 import { Injector } from '@angular/core';
 import { GeoJSONOptions } from 'leaflet';
+import { PlotData } from '../models/plotdata';
+
+const iconRetinaUrl = 'assets/cluster.png';
+const iconUrl = 'assets/cluster.png';
+const shadowUrl = 'assets/marker-shadow.png';
+const iconCluster = L.icon({
+    iconRetinaUrl,
+    iconUrl,
+    shadowUrl,
+    iconSize: [30, 30],
+    iconAnchor: [15, 30],
+    popupAnchor: [1, -34],
+    tooltipAnchor: [16, -28],
+    shadowSize: [0, 0]
+});
 
 @Injectable({
     providedIn: 'root'
 })
+
+
 export class MarkerService {
 
+
+    
     geojson: any | undefined;
     markers: Plot[] = [];
     max: number = 0;
     min: number = 99999;
     map: L.Map | undefined;
-    plots$: BehaviorSubject<Plot[]>;
+    plots$: BehaviorSubject<PlotData>;
     cluster: L.MarkerClusterGroup | undefined;
     powiaty: L.LayerGroup<any> | undefined;
     layer: L.LayerGroup<any> | undefined;
@@ -46,7 +65,6 @@ export class MarkerService {
     }
 
     boundsChanged(arg0: L.LatLngBounds, arg1: number) {
-        console.log(arg0, arg1);
         this.model.updatePlotsWithBounds(arg0, arg1);
     }
 
@@ -62,69 +80,115 @@ export class MarkerService {
         this.powiaty = powiaty;
     }
 
-    insertPlotMarkersToMap(plots: Plot[]) {
-        this.layer?.clearLayers();
-        this.cluster?.clearLayers();
-        this.powiaty?.clearLayers();
+    insertPlotMarkersToMap(plots: PlotData) {
+        if(plots != undefined){
+            this.layer?.clearLayers();
+            this.cluster?.clearLayers();
+            this.powiaty?.clearLayers();
+    
+            this.markerList = [[1, 1, 1]];
 
-        this.markerList = [[1, 1, 1]];
+            for (let i = 0; i < plots.clusters.length; i++) {
+                const lon = plots.clusters[i].longitude;
+                const lat = plots.clusters[i].latitude;
 
-        for (let i = 0; i < plots.length; i++) {
-            const lon = plots[i].longitude;
-            const lat = plots[i].latitude;
+                if (lat != null && lon != null) {
+                    const marker = L.marker([lat, lon]);
+                    marker.on('click', event => {
+                        this.model.ChangeActiveMarker(plots.clusters[i]);
+                    });
+                    //marker.bindPopup(this.popupService.makeCapitalPopup(plots[i]));
+    
+                        let icon = new L.DivIcon({
+                            className: 'my-div-icon',
+                            html: `<div style="position: relative; text-align: center" >` +
+                                '<img class="my-div-image" src="assets/cluster.png"/>'+
+                                  '<span class="my-div-span" style="position: absolute; top: 50%; left: 50%; transform: translate(-0%, -50%)">' +  plots.clusters[i].displayNumber +'</span>' +
+                                  `</div>`
+                        })
+                        marker.setIcon(icon);
+                    
+                    marker.addTo(this.layer!);
+                    //this.cluster?.addLayer(marker);
+                    this.markerList.push([
+                        marker.getLatLng().lat,
+                        marker.getLatLng().lng,
+                        plots.points[i].density,
+                        plots.points[i].id
+                    ]);
+                }
+            }
 
-            if (lat != null && lon != null) {
-                const marker = L.marker([lat, lon]);
-                marker.on('click', event => {
-                    this.model.ChangeActiveMarker(plots[i]);
+
+    
+            for (let i = 0; i < plots.points.length; i++) {
+                const lon = plots.points[i].longitude;
+                const lat = plots.points[i].latitude;
+    
+                if (lat != null && lon != null) {
+                    const marker = L.marker([lat, lon]);
+                    marker.on('click', event => {
+                        this.model.ChangeActiveMarker(plots.points[i]);
+                    });
+                    //marker.bindPopup(this.popupService.makeCapitalPopup(plots[i]));
+    
+                    if(plots.points[i].type == 1){
+                        let icon = new L.DivIcon({
+                            className: 'my-div-icon',
+                            html: `<div style="position: relative; text-align: center" >` +
+                                '<img class="my-div-image" src="assets/cluster.png"/>'+
+                                  '<span class="my-div-span" style="position: absolute; top: 50%; left: 50%; transform: translate(-0%, -50%)">' +  plots.clusters[i].displayNumber +'</span>' +
+                                  `</div>`
+                        })
+                        marker.setIcon(icon);
+                    }
+                    marker.addTo(this.layer!);
+                    //this.cluster?.addLayer(marker);
+                    this.markerList.push([
+                        marker.getLatLng().lat,
+                        marker.getLatLng().lng,
+                        plots.points[i].density,
+                        plots.points[i].id
+                    ]);
+                }
+            }
+            this.layer?.addTo(this.map!);
+    
+            this.model.getChoropleth().subscribe((GeoJsonObject: any) => {
+                const stateLayer = L.geoJSON(GeoJsonObject, {
+                    style: geometries => ({
+                        weight: 1,
+                        opacity: 0.5,
+                        fillOpacity: 0.6,
+                        fillColor: getColor(parseFloat(geometries?.properties.density))
+                    })
                 });
-                //marker.bindPopup(this.popupService.makeCapitalPopup(plots[i]));
-
-                marker.addTo(this.map!);
-                //this.cluster?.addLayer(marker);
-                this.markerList.push([
-                    marker.getLatLng().lat,
-                    marker.getLatLng().lng,
-                    plots[i].density,
-                    plots[i].id
-                ]);
-            }
-        }
-        //this.cluster?.addTo(this.map!);
-
-        this.model.getChoropleth().subscribe((GeoJsonObject: any) => {
-            const stateLayer = L.geoJSON(GeoJsonObject, {
-                style: geometries => ({
-                    weight: 1,
-                    opacity: 0.5,
-                    fillOpacity: 0.6,
-                    fillColor: getColor(parseFloat(geometries?.properties.density))
-                })
+    
+                stateLayer.addTo(this.powiaty!);
+                var info = new L.Control();
             });
-
-            stateLayer.addTo(this.powiaty!);
-            var info = new L.Control();
-        });
-
-        function getColor(d: number) {
-            if (d === undefined || d === null || isNaN(d)) {
-                return ' ';
+    
+            function getColor(d: number) {
+                if (d === undefined || d === null || isNaN(d)) {
+                    return ' ';
+                }
+                return d > 1000
+                    ? '#800026'
+                    : d > 800
+                    ? '#BD0026'
+                    : d > 500
+                    ? '#E31A1C'
+                    : d > 300
+                    ? '#FC4E2A'
+                    : d > 150
+                    ? '#FD8D3C'
+                    : d > 60
+                    ? '#FEB24C'
+                    : d > 20
+                    ? '#FED976'
+                    : '#FFEDA0';
             }
-            return d > 1000
-                ? '#800026'
-                : d > 800
-                ? '#BD0026'
-                : d > 500
-                ? '#E31A1C'
-                : d > 300
-                ? '#FC4E2A'
-                : d > 150
-                ? '#FD8D3C'
-                : d > 60
-                ? '#FEB24C'
-                : d > 20
-                ? '#FED976'
-                : '#FFEDA0';
         }
+        
     }
 }

@@ -15,4 +15,5 @@ export type Plot = {
   isActive: boolean;
   density: number;
   type: number;
+  scrappedDate: Date;
 }

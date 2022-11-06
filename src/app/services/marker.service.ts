@@ -9,6 +9,7 @@ import { ComponentFactoryResolver } from '@angular/core';
 import { Injector } from '@angular/core';
 import { GeoJSONOptions } from 'leaflet';
 import { PlotData } from '../models/plotdata';
+import { FilterService } from './filter.service';
 
 const iconRetinaUrl = 'assets/cluster.png';
 const iconUrl = 'assets/cluster.png';
@@ -46,11 +47,8 @@ export class MarkerService {
     markerList: any;
 
     constructor(
-        private http: HttpClient,
         private model: Model,
-        private popupService: PopUpService,
-        private resolver: ComponentFactoryResolver,
-        private injector: Injector
+        private filterService: FilterService
     ) {
         this.plots$ = model.getPlots();
         this.plots$.subscribe(plots => this.insertPlotMarkersToMap(plots));
@@ -65,7 +63,7 @@ export class MarkerService {
     }
 
     boundsChanged(arg0: L.LatLngBounds, arg1: number) {
-        this.model.updatePlotsWithBounds(arg0, arg1);
+        this.filterService.boundsChanged(arg0, arg1);
     }
 
     addMapToUpdate(
@@ -131,15 +129,27 @@ export class MarkerService {
                         this.model.ChangeActiveMarker(plots.points[i]);
                     });
                     //marker.bindPopup(this.popupService.makeCapitalPopup(plots[i]));
+
+                    let weekdate = new Date();
+                    weekdate.setDate(weekdate.getDate() - 7);
+
     
-                    if(plots.points[i].type == 1){
-                        let icon = new L.DivIcon({
-                            className: 'my-div-icon',
-                            html: `<div style="position: relative; text-align: center" >` +
-                                '<img class="my-div-image" src="assets/cluster.png"/>'+
-                                  '<span class="my-div-span" style="position: absolute; top: 50%; left: 50%; transform: translate(-0%, -50%)">' +  plots.clusters[i].displayNumber +'</span>' +
-                                  `</div>`
-                        })
+                    if(new Date(plots.points[i].scrappedDate).getTime() >= weekdate.getTime()){
+
+                        let iconRetinaUrl = 'assets/marker-48.png';
+                        let iconUrl = 'assets/marker-48.png';
+                        let shadowUrl = 'assets/marker-shadow.png';
+
+                        let icon = L.icon({
+                            iconRetinaUrl,
+                            iconUrl,
+                            shadowUrl,
+                            iconSize: [25, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                            tooltipAnchor: [16, -28],
+                            shadowSize: [41, 41]
+                        });
                         marker.setIcon(icon);
                     }
                     marker.addTo(this.layer!);

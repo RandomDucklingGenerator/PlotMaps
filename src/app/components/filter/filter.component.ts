@@ -9,56 +9,38 @@ import {
 } from '@angular/core';
 import { FormGroup, FormControl, NgForm } from '@angular/forms';
 import { Model } from 'src/app/models/repository.model';
+import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
     selector: 'app-filter',
     templateUrl: './filter.component.html',
     styleUrls: ['./filter.component.css']
 })
-export class FilterComponent implements OnInit, AfterViewInit {
-    newestPlots!: boolean;
-
-    @ViewChild('f') form!: NgForm;
-    showInactive: boolean;
-    range: any;
-    dateStart: any;
-    dateEnd: any;
-    constructor(private model: Model) {
-        this.showInactive = true;
+export class FilterComponent implements OnInit {
+    weekcheck: boolean = false;
+    constructor(private filterService: FilterService) {
     }
     priceMax: number = Number.MAX_SAFE_INTEGER;
     priceMin: number = 0;
 
-    ngAfterViewInit(): void {
-        this.range.value.start = new Date(localStorage.getItem('mindate')!);
-        this.range.value.end = new Date(localStorage.getItem('maxdate')!);
-        this.priceMax = Number(localStorage.getItem('priceMax')!);
-        this.dateStart = this.range.value.start;
-        this.dateEnd = this.range.value.end;
-        this.applyFilters();
-    }
-
     ngOnInit(): void {
-        this.range = new FormGroup({
-            start: new FormControl(),
-            end: new FormControl()
-        });
+        this.filterService.updateAllPlots();
     }
 
-    applyFilters() {
-        const mindate = new Date(this.range.value.start);
-        const maxdate = new Date(this.range.value.end);
-        this.model.updatePlots(
-            mindate.toISOString(),
-            maxdate.toISOString(),
-            this.priceMin,
-            this.priceMax,
-            this.newestPlots
-        );
 
-        localStorage.setItem('mindate', mindate.toISOString());
-        localStorage.setItem('maxdate', maxdate.toISOString());
-        localStorage.setItem('priceMax', this.priceMax.toString());
+    lastSevenDays(){
+        this.weekcheck = !this.weekcheck;
+        if(this.weekcheck){
+            let weekdate = new Date();
+            weekdate.setDate(weekdate.getDate() - 14);
+
+            this.filterService.changeDates(weekdate, new Date());
+        }
+        else{
+            this.filterService.changeDates(undefined, undefined);
+
+        }       
     }
+
 
 }

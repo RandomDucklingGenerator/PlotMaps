@@ -4,6 +4,7 @@ import { MarkerService } from '../../services/marker.service';
 import { icon, latLng, marker, tileLayer } from 'leaflet';
 import 'leaflet.markercluster';
 import 'proj4leaflet';
+import { FilterService } from 'src/app/services/filter.service';
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -101,7 +102,7 @@ export class MapComponent implements AfterViewInit, OnInit {
         center: latLng(52.36237, 21.28629)
     };
     markers: L.Marker[] = [];
-    constructor(private markerService: MarkerService, private ngZone: NgZone) {
+    constructor(private markerService: MarkerService, private ngZone: NgZone, private filterService: FilterService) {
         this.layers = [this.LAYER_OSM.layer, this.marker];
     }
     ngOnInit(): void {}
@@ -112,11 +113,11 @@ export class MapComponent implements AfterViewInit, OnInit {
         // this.markerService.addMapToUpdate(this.marker, this.markerClusterGroup, this.Subareas, map);
         this.markerService.addMapToUpdate(this.marker, this.Subareas, map);
         map.on('moveend', e => this.onMapClick(e, map));
-
     }
+
     onMapClick(e: L.LeafletEvent, map: L.Map): void {
         this.ngZone.run(() => {
-            this.markerService.boundsChanged(map.getBounds(), map.getZoom());
+            this.filterService.boundsChanged(map.getBounds(), map.getZoom());
         });
     }
 

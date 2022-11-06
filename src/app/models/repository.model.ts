@@ -17,6 +17,12 @@ export class Model {
     >(this.selectedPlot);
     private choropleth?: any;
     private choropleth$: BehaviorSubject<any> = new BehaviorSubject<any>(this.choropleth);
+    lastmindate: string | undefined;
+    lastmaxdate: string| undefined;
+    lastpricemin: number| undefined;
+    lastpricemax: number| undefined;
+    lastarg0!: L.LatLngBounds;
+    lastarg1!: number;
 
     constructor(private dataService: DataService) {
         this.getChoroplethData();
@@ -43,18 +49,16 @@ export class Model {
         this.selectedPlot$.next(arg0);
     }
 
-    updatePlotsWithBounds(arg0: L.LatLngBounds, arg1: number){
-        this.dataService.GetPlotsWithBounds(arg0, arg1).subscribe(data => {this.initPlots = data; this.plots$.next(data)});
-    }
-
     updatePlots(
-        mindate?: string,
-        maxDate?: string,
+        mindate?: Date,
+        maxDate?: Date,
         priceMin?: number,
         priceMax?: number,
-        showNewest?: boolean
-    ) {
-        this.dataService.GetPlots(mindate, maxDate, priceMin, priceMax).subscribe(data => {
+        arg0?: L.LatLngBounds,
+        arg1?: number
+    ) {      
+
+        this.dataService.GetPlots(mindate, maxDate, priceMin, priceMax, arg0, arg1).subscribe(data => {
             if(data != undefined){
                 this.initPlots = data;
                 data.points.forEach(plot => {

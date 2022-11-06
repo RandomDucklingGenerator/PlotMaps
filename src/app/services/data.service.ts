@@ -12,17 +12,13 @@ export class DataService {
     constructor(private apiService: ApiService) {}
 
     public GetPlots(
-        mindate?: string,
-        maxDate?: string,
+        mindate?: Date,
+        maxDate?: Date,
         priceMin?: number,
-        priceMax?: number
+        priceMax?: number,
+        arg0?: L.LatLngBounds, arg1?: number
     ): Observable<PlotData> {
-        return this.apiService.getPlots(mindate, maxDate, priceMin, priceMax);
-    }
-
-    public GetPlotsWithBounds(arg0: L.LatLngBounds, arg1: number
-    ): Observable<PlotData> {
-        return this.apiService.getPlotsWithBounds(arg0, arg1);
+        return this.apiService.getPlots(mindate?.toISOString(), maxDate?.toISOString(), priceMin, priceMax, arg0, arg1);
     }
 
     public GetChoropleth(): any {

@@ -32,7 +32,7 @@ export class FilterComponent implements OnInit {
         this.weekcheck = !this.weekcheck;
         if(this.weekcheck){
             let weekdate = new Date();
-            weekdate.setDate(weekdate.getDate() - 14);
+            weekdate.setDate(weekdate.getDate() - 7);
 
             this.filterService.changeDates(weekdate, new Date());
         }

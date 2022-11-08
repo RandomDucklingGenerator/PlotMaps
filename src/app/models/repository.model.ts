@@ -55,10 +55,11 @@ export class Model {
         priceMin?: number,
         priceMax?: number,
         arg0?: L.LatLngBounds,
-        arg1?: number
+        arg1?: number,
+        showInactive?: boolean
     ) {      
 
-        this.dataService.GetPlots(mindate, maxDate, priceMin, priceMax, arg0, arg1).subscribe(data => {
+        this.dataService.GetPlots(mindate, maxDate, priceMin, priceMax, arg0, arg1, showInactive).subscribe(data => {
             if(data != undefined){
                 this.initPlots = data;
                 data.points.forEach(plot => {

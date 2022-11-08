@@ -106,14 +106,18 @@ export class MarkerService {
                         })
                         marker.setIcon(icon);
                     
-                    marker.addTo(this.layer!);
-                    //this.cluster?.addLayer(marker);
-                    this.markerList.push([
-                        marker.getLatLng().lat,
-                        marker.getLatLng().lng,
-                        plots.points[i].density,
-                        plots.points[i].id
-                    ]);
+
+                    if(plots !== undefined && plots.points.length > 0 && plots.points[i] !== undefined){
+                        marker.addTo(this.layer!);
+                        //this.cluster?.addLayer(marker);
+                        this.markerList.push([
+                            marker.getLatLng().lat,
+                            marker.getLatLng().lng,
+                            plots.points[i].id
+                        ]);
+                    }
+
+                    
                 }
             }
 

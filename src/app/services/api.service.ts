@@ -20,14 +20,15 @@ export class ApiService {
         priceMin?: number,
         priceMax?: number,
         arg0?: LatLngBounds,
-        arg1?: number
+        arg1?: number,
+        showInactive?: boolean
     ): Observable<PlotData> {
         let queryString = '';
         if(arg0 == undefined){
-            queryString=`minDate=${minDate}&maxDate=${maxDate}&priceMin=${priceMin}&priceMax=${priceMax}&zoom=${arg1}`
+            queryString=`minDate=${minDate}&maxDate=${maxDate}&priceMin=${priceMin}&priceMax=${priceMax}&zoom=${arg1}&showInactive=${showInactive}`
         }
         else{
-            queryString=`minDate=${minDate}&maxDate=${maxDate}&priceMin=${priceMin}&priceMax=${priceMax}&northEastLat=${arg0!.getNorthEast().lat}&northEastLng=${arg0!.getNorthEast().lng}&southWestLat=${arg0!.getSouthWest().lat}&southWestLng=${arg0!.getSouthWest().lng}&zoom=${arg1}`
+            queryString=`minDate=${minDate}&maxDate=${maxDate}&priceMin=${priceMin}&priceMax=${priceMax}&northEastLat=${arg0!.getNorthEast().lat}&northEastLng=${arg0!.getNorthEast().lng}&southWestLat=${arg0!.getSouthWest().lat}&southWestLng=${arg0!.getSouthWest().lng}&zoom=${arg1}&showInactive=${showInactive}`
         }
         
         const path = `${environment.baseUrl}/plots?${queryString}`;

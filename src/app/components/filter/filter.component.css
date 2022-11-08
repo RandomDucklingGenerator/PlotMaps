@@ -1,4 +1,9 @@
-.filter{
-  width: 50%;
-  display: block;
+.filter-container{
+  display: flex;
+  padding: 5px;
+  
+}
+
+.filter-element{
+  margin: 5px;
 }

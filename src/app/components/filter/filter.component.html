@@ -1,6 +1,14 @@
-<div class="form-check form-switch">
+<div class="filter-container">
+  <div class="form-check form-switch filter-element">
     <label class="form-check-label">
         <input class="form-check-input" type="checkbox"  id="weekcheckBox" (change)="lastSevenDays()" [checked]="weekcheck"/>
         Last 7 days
       </label>
   </div>
+  <div class="form-check form-switch filter-element">    
+      <label class="form-check-label">
+        <input class="form-check-input" type="checkbox"  id="showInactive" (change)="showInactiveFunc()" [checked]="showInactive"/>
+        Show inactive
+      </label>
+  </div>
+</div>

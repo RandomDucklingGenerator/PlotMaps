@@ -16,9 +16,9 @@ export class DataService {
         maxDate?: Date,
         priceMin?: number,
         priceMax?: number,
-        arg0?: L.LatLngBounds, arg1?: number
+        arg0?: L.LatLngBounds, arg1?: number, showInactive?: boolean
     ): Observable<PlotData> {
-        return this.apiService.getPlots(mindate?.toISOString(), maxDate?.toISOString(), priceMin, priceMax, arg0, arg1);
+        return this.apiService.getPlots(mindate?.toISOString(), maxDate?.toISOString(), priceMin, priceMax, arg0, arg1, showInactive);
     }
 
     public GetChoropleth(): any {

@@ -18,6 +18,7 @@ import { FilterService } from 'src/app/services/filter.service';
 })
 export class FilterComponent implements OnInit {
     weekcheck: boolean = false;
+    showInactive: boolean = false;
     constructor(private filterService: FilterService) {
     }
     priceMax: number = Number.MAX_SAFE_INTEGER;
@@ -40,6 +41,11 @@ export class FilterComponent implements OnInit {
             this.filterService.changeDates(undefined, undefined);
 
         }       
+    }
+
+    showInactiveFunc(){
+        this.showInactive = !this.showInactive;
+        this.filterService.showInactiveChanged(this.showInactive);    
     }
 
 

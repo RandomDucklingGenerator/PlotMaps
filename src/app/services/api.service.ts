@@ -40,4 +40,6 @@ export class ApiService {
         const path = `${environment.baseUrl}/choropleth`;
         return this.http.get<any>(path);
     }
+
+    
 }

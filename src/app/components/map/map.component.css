@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  margin: 30px;
+  margin: 0px;
 }
 
 .map-frame {
@@ -31,4 +31,14 @@
   float: left;
   margin-right: 8px;
   opacity: 0.7;
+}
+
+.leaflet-map{
+  height: 100vh;
+}
+
+@media only screen and (max-width: 1080px) {
+  .leaflet-map{
+    /* height: 80vh; */
+  }
 }

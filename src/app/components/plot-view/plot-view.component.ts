@@ -18,8 +18,12 @@ export class PlotViewComponent implements OnInit {
     eventsSubject: Subject<Plot> = new Subject<Plot>();
     selectedMarker$: BehaviorSubject<Plot | undefined>;
     selectedPage: number = 0;
+    mobile: boolean = false;
 
     constructor(private model: Model, private ngZone: NgZone) {
+        if (window.screen.width <= 1080) {
+            this.mobile = true;
+          }
         this.plots$ = model.getPlots();
         this.plots$.subscribe(plots => this.applyPlots(plots));
         this.selectedMarker$ = model.getActivePlot();
@@ -39,6 +43,9 @@ export class PlotViewComponent implements OnInit {
                 this.ngZone.run(() => {
                     this.eventsSubject.next(plot);
                 });
+                if (window.screen.width <= 1080) {
+                    window.location.href = plot.url;
+                  }
             }
             
         });

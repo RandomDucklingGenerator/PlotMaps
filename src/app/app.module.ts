@@ -18,9 +18,10 @@ import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluste
 import { PlotViewComponent } from './components/plot-view/plot-view.component';
 import { CardComponent } from './components/card/card.component';
 import localePl from '@angular/common/locales/pl';
+import { DetailsViewComponent } from './components/details-view/details-view.component';
 registerLocaleData(localePl);
 @NgModule({
-    declarations: [AppComponent, MapComponent, FilterComponent, PlotViewComponent, CardComponent],
+    declarations: [AppComponent, MapComponent, FilterComponent, PlotViewComponent, CardComponent, DetailsViewComponent],
     imports: [
         BrowserModule,
         HttpClientModule,
